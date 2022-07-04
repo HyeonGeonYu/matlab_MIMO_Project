@@ -1,13 +1,13 @@
 function [H] = Channel_Gen_ML(SP)
 
     Nr = SP.Nr;
-    Nu = SP.Nu;
+    Nt = SP.Nt;
     H_type = SP.H_type;
-    L = SP.L;
+
     switch H_type
         
         case 'Rayleigh'
-            H = 1/sqrt(2)*(randn(Nr,Nu) + 1j*randn(Nr,Nu));
+            H = 1/sqrt(2)*(randn(Nr,Nt) + 1j*randn(Nr,Nt));
     end
     
     end
