@@ -1,4 +1,4 @@
-function [H] = Channel_Gen_ML(SP)
+function [H] = Channel_Gen(SP)
 
     Nr = SP.Nr;
     Nt = SP.Nt;
