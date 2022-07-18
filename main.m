@@ -46,7 +46,7 @@ elseif example_val == "Ex_2"
 
   for ss = 1: length(sigma_val)
     for expr = 1 : experiments
-      R_nn = sigma_val(ss)*eye(3); % Number of receiver antenna
+      R_nn = (sigma_val(ss)^2)*eye(3); % Number of receiver antenna
       SP.H_type = 'Rayleigh'; % Channel type (Rayleigh or ...)
       [H] = Channel_Gen(SP); % H (channel matrix Nr x Nt)
       [V_matrix,Lambda_matrix] = eig(H'*R_nn^(-1)*H);
@@ -55,18 +55,27 @@ elseif example_val == "Ex_2"
       Lambda_matrix = Lambda_matrix(1:B,1:B);
       V_matrix = V_matrix(:,idx_Lm);
       V_matrix = V_matrix(:,1:B);
-      D_matrix = diag([0.76,0.24]);
+      D_matrix = diag([0.75,0.25]);
       gamma_scalar = p_0 / trace( D_matrix * Lambda_matrix^(-1) );
       Gamma_matrix = gamma_scalar*D_matrix;
       tmp = diag(real(Gamma_matrix));
+      result_value_tmp_video(ss) = result_value_tmp_video(ss) + tmp(1);
+      result_value_tmp_audio(ss) = result_value_tmp_audio(ss) + tmp(2);
     end
-    result_value_tmp_video(ss) = result_value_tmp_video(ss) + tmp(1);
-    result_value_tmp_audio(ss) = result_value_tmp_audio(ss) + tmp(2);
+    
   end
-  result_value_tmp_video = result_value_tmp_video/experiments;
-  result_value_tmp_audio = result_value_tmp_audio/experiments;
-  plot(SNR_dB,result_value_tmp_video)
+
+  result_value_tmp_video = 10*log10(result_value_tmp_video/experiments);
+  result_value_tmp_audio = 10*log10(result_value_tmp_audio/experiments);
+  
+  plot(SNR_dB,result_value_tmp_video,'-g+')
   hold on;
-  plot(SNR_dB,result_value_tmp_audio)
+  plot(SNR_dB,result_value_tmp_audio,'-r*')
   hold off;
+  grid on
+  grid minor
+  legend('Video Stream','Audio Stream')
+  xlabel('Total transmit power/receive  noise(in dB)') 
+  ylabel('Sub-channel SNR(in dB)') 
+
 end
