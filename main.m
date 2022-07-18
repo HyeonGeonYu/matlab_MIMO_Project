@@ -5,6 +5,7 @@
 
 clear;
 clc;
+close;
 
 example_val ="Ex_2"
 
@@ -31,14 +32,41 @@ if example_val == "Ex_1"
 elseif example_val == "Ex_2"
   %% Ex_2
   % system parameters
+
+  experiments = 10000
+
+  p_0 = 1;
+  B = 2;
   SP.Nt = 3;      % Number of transmitter antenna
   SP.Nr = 3;     % Number of receiver antenna
-  B = 2;
-  SP.SNR_dB = linspace(-8,8,5);   
+  SNR_dB = linspace(0,20,11);   %(10*log10(p_0/sigma^2))
+  sigma_val = (10 .^ (SNR_dB / 10) ) .^ (-0.5);
+  result_value_tmp_video = zeros(size(SNR_dB));
+  result_value_tmp_audio = zeros(size(SNR_dB));
 
-                                          
-  SP.H_type = 'Rayleigh';         % Channel type (Rayleigh or ...)
-
-  [H] = Channel_Gen(SP); % H (channel matrix Nr x Nt)
-  
+  for ss = 1: length(sigma_val)
+    for expr = 1 : experiments
+      R_nn = sigma_val(ss)*eye(3); % Number of receiver antenna
+      SP.H_type = 'Rayleigh'; % Channel type (Rayleigh or ...)
+      [H] = Channel_Gen(SP); % H (channel matrix Nr x Nt)
+      [V_matrix,Lambda_matrix] = eig(H'*R_nn^(-1)*H);
+      [Lambda_vector,idx_Lm] = sort(diag(Lambda_matrix),'descend');
+      Lambda_matrix = Lambda_matrix(idx_Lm,idx_Lm);
+      Lambda_matrix = Lambda_matrix(1:B,1:B);
+      V_matrix = V_matrix(:,idx_Lm);
+      V_matrix = V_matrix(:,1:B);
+      D_matrix = diag([0.76,0.24]);
+      gamma_scalar = p_0 / trace( D_matrix * Lambda_matrix^(-1) );
+      Gamma_matrix = gamma_scalar*D_matrix;
+      tmp = diag(real(Gamma_matrix));
+    end
+    result_value_tmp_video(ss) = result_value_tmp_video(ss) + tmp(1);
+    result_value_tmp_audio(ss) = result_value_tmp_audio(ss) + tmp(2);
+  end
+  result_value_tmp_video = result_value_tmp_video/experiments;
+  result_value_tmp_audio = result_value_tmp_audio/experiments;
+  plot(SNR_dB,result_value_tmp_video)
+  hold on;
+  plot(SNR_dB,result_value_tmp_audio)
+  hold off;
 end
