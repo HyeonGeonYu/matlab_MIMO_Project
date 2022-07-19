@@ -1,7 +1,3 @@
-%{
-  * Original Code
-  * https://github.com/Yunseong-Cho/LearningML/blob/master/MLdecoding/Main_ML.m
-%}
 
 clear;
 clc;
