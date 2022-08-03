@@ -7,7 +7,7 @@ function [H] = Channel_Gen(SP)
     switch H_type
         
         case 'Rayleigh'
-            H = 1/sqrt(2)*(randn(Nr,Nt) + 1j*randn(Nr,Nt));
+            H = 1/(2^1.5)*(randn(Nr,Nt) + 1j*randn(Nr,Nt));
     end
     
     end
