@@ -7,5 +7,9 @@
       
   2. Linear Transmit Processing in MIMO Communications Systems   TSP_2005 August
       * 저자 : Michael Joham, Wolfgang Utschick, Josef A. Nossek    
-      * 기간 : 2022-07-20 ~ ing
+      * 기간 : 2022-07-20 ~ stopped
+
+  3. Rate Optimization for Multiuser MIMO Systems With Linear Processing   TSP_2008 August
+      * 저자 : Shuying Shi; Martin Schubert; Holger Boche
+      * 기간 : 2024-01-01 ~ 2024-01-04
 
